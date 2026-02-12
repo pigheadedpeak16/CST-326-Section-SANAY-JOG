@@ -1,85 +1,115 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Score")]
-    public int leftScore = 0;
-    public int rightScore = 0;
-    public int scoreToWin = 11;
-
     [Header("References")]
-    public Ball ball;
+    public Ball ball;                         // drag your Ball here
+    public PowerUpSpawner powerUpSpawner;     // drag your PowerUpSpawner here
 
-    [Header("UI (TextMeshPro)")]
-    public TMP_Text leftScoreText;
-    public TMP_Text rightScoreText;
-    public TMP_Text messageText; // optional (can be null)
+    [Header("UI")]
+    public TextMeshProUGUI leftScoreText;     // drag LeftScoreText here
+    public TextMeshProUGUI rightScoreText;    // drag RightScoreText here
+
+    [Header("Rules")]
+    public int winScore = 11;
+
+    int leftScore = 0;
+    int rightScore = 0;
+
+    // For "grow last paddle hit" powerup
+    public Transform LastPaddleHit { get; private set; }
 
     void Start()
     {
-        UpdateUI();
-        SetMessage(""); // clear message on start
+        UpdateScoreUI();
     }
 
-    // Call when LEFT player scores (ball went into RIGHT goal)
+    public void SetLastPaddle(Transform paddle)
+    {
+        LastPaddleHit = paddle;
+    }
+
+    // Call when RIGHT goal is hit (LEFT player scored)
     public void ScoreLeft()
     {
         leftScore++;
-        Debug.Log($"Left scores! {leftScore} - {rightScore}");
-        UpdateUI();
+        UpdateScoreUI();
+        StartCoroutine(ScorePop(leftScoreText));
 
-        if (CheckGameOver()) return;
+        if (CheckWin())
+        {
+            ResetGame();
+            return;
+        }
 
-        // Send ball toward the player who got scored on (RIGHT got scored on)
-        ball.ResetBall(Vector2.right);
+        powerUpSpawner?.SpawnOne();
+        ball?.ResetBall(Vector2.right); // send toward the player who got scored on (right side)
     }
 
-    // Call when RIGHT player scores (ball went into LEFT goal)
+    // Call when LEFT goal is hit (RIGHT player scored)
     public void ScoreRight()
     {
         rightScore++;
-        Debug.Log($"Right scores! {leftScore} - {rightScore}");
-        UpdateUI();
+        UpdateScoreUI();
+        StartCoroutine(ScorePop(rightScoreText));
 
-        if (CheckGameOver()) return;
-
-        // Send ball toward the player who got scored on (LEFT got scored on)
-        ball.ResetBall(Vector2.left);
-    }
-
-    bool CheckGameOver()
-    {
-        if (leftScore >= scoreToWin || rightScore >= scoreToWin)
+        if (CheckWin())
         {
-            string winner = leftScore >= scoreToWin ? "Left" : "Right";
-            Debug.Log($"Game Over, {winner} Paddle Wins");
-
-            SetMessage($"Game Over!\n{winner} Wins");
-
-            // Reset scores
-            leftScore = 0;
-            rightScore = 0;
-            UpdateUI();
-
-            // Restart ball in a neutral/random direction after game over
-            Vector2 dir = Random.value < 0.5f ? Vector2.left : Vector2.right;
-            ball.ResetBall(dir);
-
-            return true;
+            ResetGame();
+            return;
         }
 
+        powerUpSpawner?.SpawnOne();
+        ball?.ResetBall(Vector2.left); // send toward the player who got scored on (left side)
+    }
+
+    bool CheckWin()
+    {
+        if (leftScore >= winScore)
+        {
+            Debug.Log("Game Over, Left Paddle Wins");
+            return true;
+        }
+        if (rightScore >= winScore)
+        {
+            Debug.Log("Game Over, Right Paddle Wins");
+            return true;
+        }
         return false;
     }
 
-    void UpdateUI()
+    void ResetGame()
+    {
+        leftScore = 0;
+        rightScore = 0;
+        UpdateScoreUI();
+
+        // launch in a random direction after reset
+        Vector2 dir = Random.value < 0.5f ? Vector2.left : Vector2.right;
+        ball?.ResetBall(dir);
+    }
+
+    void UpdateScoreUI()
     {
         if (leftScoreText != null) leftScoreText.text = leftScore.ToString();
         if (rightScoreText != null) rightScoreText.text = rightScore.ToString();
     }
 
-    void SetMessage(string msg)
+    IEnumerator ScorePop(TextMeshProUGUI txt)
     {
-        if (messageText != null) messageText.text = msg;
+        if (txt == null) yield break;
+
+        Vector3 originalScale = txt.transform.localScale;
+        Color originalColor = txt.color;
+
+        txt.color = Color.yellow;
+        txt.transform.localScale = originalScale * 1.35f;
+
+        yield return new WaitForSeconds(0.15f);
+
+        txt.color = originalColor;
+        txt.transform.localScale = originalScale;
     }
 }
