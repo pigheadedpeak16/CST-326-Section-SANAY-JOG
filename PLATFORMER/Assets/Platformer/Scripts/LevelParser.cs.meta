@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8bebc5e1e08d2ba4e8e47295d2195289
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - levelFile: {fileID: 4900000, guid: 3cc86b075fe911c4b8b8055a38219a43, type: 3}
+  - levelRoot: {instanceID: 0}
+  - rockPrefab: {instanceID: 0}
+  - brickPrefab: {instanceID: 0}
+  - questionBoxPrefab: {instanceID: 0}
+  - strongPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
