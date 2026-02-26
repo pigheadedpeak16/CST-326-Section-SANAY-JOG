@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2688348603940486314
+--- !u!1 &3434658636523271704
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 21478982346329190}
-  - component: {fileID: 1912177317441285044}
-  - component: {fileID: 8931741844805879814}
-  - component: {fileID: 8981372767209837273}
-  - component: {fileID: 4726302006715164159}
-  m_Layer: 6
-  m_Name: QuestionBoxPrefab
+  - component: {fileID: 3674884704634652423}
+  - component: {fileID: 6866375803379776302}
+  - component: {fileID: 1367711464801730803}
+  - component: {fileID: 2583078549105246111}
+  - component: {fileID: -803473452220378755}
+  m_Layer: 0
+  m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &21478982346329190
+--- !u!4 &3674884704634652423
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688348603940486314}
+  m_GameObject: {fileID: 3434658636523271704}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.68306, z: -2.12639}
+  m_LocalPosition: {x: 1222.9119, y: 0.00001, z: 1016.28827}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1912177317441285044
+--- !u!33 &6866375803379776302
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688348603940486314}
+  m_GameObject: {fileID: 3434658636523271704}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8931741844805879814
+--- !u!23 &1367711464801730803
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688348603940486314}
+  m_GameObject: {fileID: 3434658636523271704}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6d7bfaa9e2daf1b4c9695e3fc8de7cc3, type: 2}
+  - {fileID: 2100000, guid: 0edf1fc6f20dc724f866c7d1f1fe06b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,14 +92,14 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8981372767209837273
+--- !u!65 &2583078549105246111
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688348603940486314}
-  m_Material: {fileID: 13400000, guid: cf1cd03c86beeb646a7817120b65f17c, type: 2}
+  m_GameObject: {fileID: 3434658636523271704}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -107,23 +107,21 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4726302006715164159
+--- !u!114 &-803473452220378755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688348603940486314}
+  m_GameObject: {fileID: 3434658636523271704}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89db30b0c6141d543889f5eb046ab40b, type: 3}
+  m_Script: {fileID: 11500000, guid: cf3b1386ecdd4ed428966878d22d4df8, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::QuestionBlock
-  coinAmount: 1
-  bonusScore: 0
+  m_EditorClassIdentifier: Assembly-CSharp::HazardKill

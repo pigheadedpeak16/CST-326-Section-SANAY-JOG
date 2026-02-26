@@ -395,12 +395,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bebc5e1e08d2ba4e8e47295d2195289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelFile: {fileID: 4900000, guid: 3cc86b075fe911c4b8b8055a38219a43, type: 3}
+  levelFile: {fileID: 4900000, guid: fe45c10d1a2aeb84c9bf5891254dcc11, type: 3}
   levelRoot: {fileID: 406602702}
   rockPrefab: {fileID: 3626828250769143633, guid: 1585c24a2ac6dde4399b28d8d5918b76, type: 3}
   brickPrefab: {fileID: 8400920514495162481, guid: 6a817f4f48b49f946b1fac470e83f096, type: 3}
   questionBoxPrefab: {fileID: 2688348603940486314, guid: 5a57b81710648444bb374e22b2b53614, type: 3}
   strongPrefab: {fileID: 8164697946070534294, guid: 5a693fe589e7aa242ac7e0bc82bb0940, type: 3}
+  waterPrefab: {fileID: 3434658636523271704, guid: bb7c24b5ee10b0f43a2aa124d3b123d3, type: 3}
+  goalPrefab: {fileID: 6239049241500165872, guid: 462a6009b0e772b4badf92abc97ac9db, type: 3}
+  playerPrefab: {fileID: 1188298499290067536, guid: 56d34f2b6af91b5449cbb3b7e5bcdd1e, type: 3}
+  cellSize: 1
+  origin: {x: 0, y: 0, z: 0}
 --- !u!4 &610288774
 Transform:
   m_ObjectHideFlags: 0
@@ -562,7 +567,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 922125655}
-  - component: {fileID: 922125656}
   m_Layer: 0
   m_Name: '--- Logic '
   m_TagString: Untagged
@@ -585,24 +589,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &922125656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 922125654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 143463aa33f81894e8b7a158e26ddca9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlockClickHandler
-  mainCamera: {fileID: 963194227}
-  clickableLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  maxDistance: 100000
-  uiManager: {fileID: 1697311716}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,9 +599,9 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
-  - component: {fileID: 963194230}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -750,11 +736,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2a4152b03cb0a24b8c782bdf8686e0e, type: 3}
+  m_Script: {fileID: 11500000, guid: 724ed390837ad324d8399b1da5e637ab, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MouseCameraFollow
-  moveRange: 20
-  smoothSpeed: 5
+  m_EditorClassIdentifier: Assembly-CSharp::CameraFollowX
+  panSpeed: 6
+  edgePercent: 0.06
+  lockY: 1
+  lockZ: 1
 --- !u!1 &982391922
 GameObject:
   m_ObjectHideFlags: 0
@@ -958,9 +946,10 @@ MonoBehaviour:
   scoreText: {fileID: 1170577327}
   coinText: {fileID: 814493443}
   timeText: {fileID: 251304521}
+  messageText: {fileID: 0}
   score: 0
   coins: 0
-  startTime: 300
+  startTime: 100
 --- !u!114 &1697311717
 MonoBehaviour:
   m_ObjectHideFlags: 0

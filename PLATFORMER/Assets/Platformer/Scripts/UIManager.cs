@@ -1,47 +1,71 @@
 using UnityEngine;
 using TMPro;
-using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
+
+    [Header("UI")]
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI timeText;
+    public TextMeshProUGUI messageText; // optional
 
+    [Header("Values")]
     public int score = 0;
     public int coins = 0;
-    public int startTime = 300;
+
+    [Header("Timer")]
+    public float startTime = 100f;
 
     private float currentTime;
+    private bool failed = false;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     void Start()
     {
         currentTime = startTime;
+        failed = false;
+
+        if (messageText != null)
+            messageText.text = "";
+
         UpdateUI();
-        StartCoroutine(Countdown());
     }
 
-    IEnumerator Countdown()
+    void Update()
     {
-        while (currentTime > 0)
+        if (failed) return;
+
+        currentTime -= Time.deltaTime;
+
+        if (currentTime <= 0f)
         {
-            yield return new WaitForSeconds(1f);
-            currentTime--;
-            UpdateUI();
-        }
-    }
+            currentTime = 0f;
+            failed = true;
 
-    public void UpdateUI()
-    {
-        scoreText.text = "Score: " + score;
-        coinText.text = "Coins: " + coins;
-        timeText.text = "Time: " + currentTime;
+            Debug.Log("PLAYER FAILED: Did not reach the goal in time.");
+
+            if (messageText != null)
+                messageText.text = "FAILED: Time Up!";
+        }
+
+        UpdateUI();
     }
 
     public void AddCoin(int amount)
     {
         coins += amount;
-        score += 100 * amount;
+        score += 100 * amount; // 100 points per coin
         UpdateUI();
     }
 
@@ -49,5 +73,12 @@ public class UIManager : MonoBehaviour
     {
         score += amount;
         UpdateUI();
+    }
+
+    public void UpdateUI()
+    {
+        if (scoreText != null) scoreText.text = "Score: " + score;
+        if (coinText != null) coinText.text = "Coins: " + coins;
+        if (timeText != null) timeText.text = "Time: " + Mathf.CeilToInt(currentTime);
     }
 }

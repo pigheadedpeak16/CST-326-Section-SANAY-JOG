@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1250347436934072100}
   - component: {fileID: 5817733160687314423}
   - component: {fileID: 2909220223122697705}
-  m_Layer: 0
+  - component: {fileID: 1522907982847469775}
+  m_Layer: 6
   m_Name: BrickPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +99,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8400920514495162481}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: cf1cd03c86beeb646a7817120b65f17c, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -112,3 +113,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1522907982847469775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8400920514495162481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164fd78ef24cf5a40a66336dff7107c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakableBlock
+  points: 100

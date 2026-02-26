@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,10 +7,17 @@ public class LevelParser : MonoBehaviour
     public Transform levelRoot;
 
     [Header("Prefabs")]
-    public GameObject rockPrefab;
-    public GameObject brickPrefab;
-    public GameObject questionBoxPrefab;
-    public GameObject strongPrefab;
+    public GameObject rockPrefab;         // x
+    public GameObject brickPrefab;        // b
+    public GameObject questionBoxPrefab;  // ?
+    public GameObject strongPrefab;       // s
+    public GameObject waterPrefab;        // w
+    public GameObject goalPrefab;         // g
+    public GameObject playerPrefab;       // p
+
+    [Header("Grid Settings")]
+    public float cellSize = 1f;
+    public Vector3 origin = Vector3.zero;
 
     void Start()
     {
@@ -38,56 +44,57 @@ public class LevelParser : MonoBehaviour
             return;
         }
 
-        // Push lines onto a stack so we can pop bottom-up rows.
-        Stack<string> levelRows = new Stack<string>();
+        // Handles Windows line endings safely.
+        string[] lines = levelFile.text.Replace("\r", "").Split('\n');
 
-        foreach (string line in levelFile.text.Split('\n'))
-            levelRows.Push(line);
+        // Bottom of the level should be the LAST line in the file.
+        int totalRows = lines.Length;
 
-        int row = 0;
-
-        while (levelRows.Count > 0)
+        for (int fileRow = 0; fileRow < totalRows; fileRow++)
         {
-            string rowString = levelRows.Pop();
+            string rowString = lines[fileRow];
 
-            // Remove carriage returns in case file uses Windows line endings (\r\n)
-            rowString = rowString.Replace("\r", "");
+            // Map file row to world row so bottom is y=0
+            int worldRow = (totalRows - 1) - fileRow;
 
-            char[] rowChars = rowString.ToCharArray();
+            // If the row is empty, it's just an empty row. Keep it.
+            if (string.IsNullOrEmpty(rowString))
+                continue;
 
-            for (int columnIndex = 0; columnIndex < rowChars.Length; columnIndex++)
+            for (int col = 0; col < rowString.Length; col++)
             {
-                char currentChar = rowChars[columnIndex];
-
+                char c = rowString[col];
                 GameObject prefabToSpawn = null;
 
-                // Map characters in the text file to prefabs
-                if (currentChar == 'x') prefabToSpawn = rockPrefab;
-                else if (currentChar == 'b') prefabToSpawn = brickPrefab;
-                else if (currentChar == '?') prefabToSpawn = questionBoxPrefab;
-                else if (currentChar == 's') prefabToSpawn = strongPrefab;
-                else
-                    continue; // ignore spaces/unknown chars
+                // Map letters to prefabs
+                if (c == 'x') prefabToSpawn = rockPrefab;
+                else if (c == 'b') prefabToSpawn = brickPrefab;
+                else if (c == '?') prefabToSpawn = questionBoxPrefab;
+                else if (c == 's') prefabToSpawn = strongPrefab;
+                else if (c == 'w') prefabToSpawn = waterPrefab;
+                else if (c == 'g') prefabToSpawn = goalPrefab;
+                else if (c == 'p') prefabToSpawn = playerPrefab;
+                else continue; // ignore spaces/unknown chars
 
-                // Position on a simple grid (1 unit per char)
-                Vector3 newPosition = new Vector3(columnIndex, row, 0f);
+                // If a prefab wasn't assigned in Inspector, skip gracefully
+                if (prefabToSpawn == null)
+                {
+                    Debug.LogWarning($"LevelParser: No prefab assigned for '{c}' (column {col}, row {worldRow}).");
+                    continue;
+                }
 
-                // Instantiate + parent under levelRoot
-                GameObject block = Instantiate(prefabToSpawn, newPosition, Quaternion.identity);
-                block.transform.SetParent(levelRoot, true);
+                Vector3 pos = origin + new Vector3(col * cellSize, worldRow * cellSize, 0f);
+                Instantiate(prefabToSpawn, pos, Quaternion.identity, levelRoot);
             }
-
-            row++;
         }
     }
 
-    // --------------------------------------------------------------------------
     void ReloadLevel()
     {
         if (levelRoot == null) return;
 
-        foreach (Transform child in levelRoot)
-            Destroy(child.gameObject);
+        for (int i = levelRoot.childCount - 1; i >= 0; i--)
+            Destroy(levelRoot.GetChild(i).gameObject);
 
         LoadLevel();
     }
