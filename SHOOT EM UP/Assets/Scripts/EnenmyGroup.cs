@@ -13,11 +13,24 @@ public class EnemyGroup : MonoBehaviour
     public GameObject enemyBulletPrefab;
     public float fireInterval = 2f;
 
+    [Header("Shoot Animation")]
+    public string shootTriggerName = "Shoot";
+
+    [Header("Sound")]
+    public AudioSource audioSource;
+    public AudioClip enemyShootClip;
+
     Vector3 direction = Vector3.right;
 
     int initialCount;
     Coroutine moveRoutine;
     bool gameEnded = false;
+
+    void Awake()
+    {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -26,7 +39,6 @@ public class EnemyGroup : MonoBehaviour
         moveRoutine = StartCoroutine(MoveLoop());
         InvokeRepeating(nameof(FireBullet), 1f, fireInterval);
 
-        // Subscribe to event (IMPORTANT: matches Action<int>)
         GameEvents.EnemyDestroyed += OnEnemyDestroyed;
     }
 
@@ -82,13 +94,19 @@ public class EnemyGroup : MonoBehaviour
         if (transform.childCount == 0) return;
 
         Transform shooter = transform.GetChild(Random.Range(0, transform.childCount));
+
+        // Trigger shoot animation
+        shooter.GetComponent<Animator>()?.SetTrigger(shootTriggerName);
+
+        // Play enemy shooting sound
+        if (audioSource != null && enemyShootClip != null)
+            audioSource.PlayOneShot(enemyShootClip);
+
         Instantiate(enemyBulletPrefab, shooter.position, Quaternion.identity);
     }
 
-    // IMPORTANT: Must accept int because event is Action<int>
     void OnEnemyDestroyed(int points)
     {
-        // If this was the last enemy → end game
         if (transform.childCount <= 1 && !gameEnded)
         {
             gameEnded = true;
@@ -96,7 +114,6 @@ public class EnemyGroup : MonoBehaviour
             return;
         }
 
-        // Restart movement to immediately update speed
         if (moveRoutine != null)
         {
             StopCoroutine(moveRoutine);
